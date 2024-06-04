@@ -1,7 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-router = APIRouter()
+router = APIRouter(prefix="/user",
+                   tags=["user"], 
+                   responses={404:{"message":"not found"}})
 
 #Entidad user
 class User(BaseModel):
@@ -29,12 +31,12 @@ async def users():
     return users_list
 
 #parametro PATH 
-@router.get("/user/{id}", response_model=User, status_code=200)
+@router.get("/{id}", response_model=User, status_code=200)
 async def user(id: int):
         return search_user(id)
         
 #parametro QUERY
-@router.get("/user/", response_model=User, status_code=200)
+@router.get("/", response_model=User, status_code=200)
 async def user(id: int):
     return search_user(id)
         
@@ -43,7 +45,7 @@ async def user(id: int):
 #POST/Anadir
                     #HTTP STATUS CODE
                     #status_code=(num)
-@router.post("/user/", response_model=User ,status_code=201)
+@router.post("/", response_model=User ,status_code=201)
 async def create_user(user: User):
 
      if type(search_user(user.id)) == User:
@@ -55,7 +57,7 @@ async def create_user(user: User):
 
 #PUT/actualizar
 
-@router.put("/user/")
+@router.put("/")
 async def update_user(user: User):
         
         found = False
@@ -74,7 +76,7 @@ async def update_user(user: User):
                   return user
 
 #DELETE
-@router.delete("/user/{id}")
+@router.delete("/{id}")
 async def delete_user(id:int):
      
      found = False

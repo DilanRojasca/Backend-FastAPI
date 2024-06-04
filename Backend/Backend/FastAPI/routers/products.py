@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/products")
+router = APIRouter(prefix="/products",
+                   tags=["products"],
+                    responses={404: {"mensage":"not found"}})
 
 products_list = ["apple", "banana", "orange", "product 4", "product 5"]
 
