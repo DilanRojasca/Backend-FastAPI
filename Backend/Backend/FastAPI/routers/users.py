@@ -29,12 +29,12 @@ async def users():
     return users_list
 
 #parametro PATH 
-@router.get("/user/{id}")
+@router.get("/user/{id}", response_model=User, status_code=200)
 async def user(id: int):
         return search_user(id)
         
 #parametro QUERY
-@router.get("/user/")
+@router.get("/user/", response_model=User, status_code=200)
 async def user(id: int):
     return search_user(id)
         
@@ -65,10 +65,10 @@ async def update_user(user: User):
              if saved_user.id == user.id:
                 users_list[index] = user
                 found = True
-                return {"message":"User updated"}
+                raise HTTPException(status_code=200, detail="user update")
              
              if not found:
-                  return {"error":"User not found"}
+                  raise HTTPException(status_code=404, detail="User not found")
              
              else:
                   return user
@@ -83,9 +83,10 @@ async def delete_user(id:int):
           if saved_user.id == id:
                del users_list[index]
                found = True
+               raise HTTPException(status_code=200, detail="User has been delete")
           
           if not found:
-               return {"error":"User not found"}
+               raise HTTPException(status_code=404, detail="user not found")
           
 
 def search_user(id: int):
@@ -93,7 +94,7 @@ def search_user(id: int):
         try:   
             return list(users)[0]
         except:
-             return {"error":"User not found"}
+             raise HTTPException(status_code=404, detail="user not found")
         
-#Tarea: poner bien los errores con http status code.
+
 
